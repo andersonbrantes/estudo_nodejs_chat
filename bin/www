@@ -100,7 +100,7 @@ io.on('connection', function(socket){
   socket.emit('bemvindo');
 
   // Mostra para os outros usuarios que um novo usuario entrou
-  socket.broadcast.emit('usuario entrou', { usuarioid: usuarioid });
+  // socket.broadcast.emit('usuario entrou', { usuarioid: usuarioid });
 
   socket.on('altera nome', function(data){
     console.log('altera');
@@ -112,14 +112,21 @@ io.on('connection', function(socket){
     socket.broadcast.emit('usuario alterou nome', { usuarioid: usuarioid, nome: nome });
   });
 
-  socket.on('envia mensagem', function(data) {
+  socket.on('envia menssagem', function(data) {
     console.log('mess');
     var message = data.message;
-    var nome = socket.username ? socket.username : socket.id;
+    var nome = data.nome;
 
     socket.emit('mensagem enviada', { message: message, nome: nome });
     socket.broadcast.emit('mensagem enviada por usuario', { message: message, nome: nome });
 
+  });
+
+  socket.on('login', function(data){
+
+    var usuarioNome = data.nome;
+    socket.emit('voce entrou', { nome: usuarioNome });
+    socket.broadcast.emit('usuario entrou', { nome: usuarioNome });
   });
 
 });
